@@ -9,467 +9,853 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  @font-face {
+    font-family: 'CatFont';
+    src: local('Segoe UI'), local('PingFang SC'), local('Microsoft YaHei'), sans-serif;
+  }
+
   body {
-    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-    background: linear-gradient(135deg, #fef7e0 0%, #fce4c8 30%, #f8d8b8 60%, #fef0e4 100%);
-    color: #5c4a3a;
+    font-family: 'CatFont', "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #fdf6ed;
+    color: #4a3724;
     line-height: 1.8;
-    min-height: 100vh;
+    cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><text y='20' font-size='20'>🐾</text></svg>") 12 12, auto;
+    overflow-x: hidden;
   }
 
-  /* ── 浮动猫爪装饰 ── */
-  body::before {
-    content: "🐾";
+  /* ── 自定义滚动条 ── */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #fef7e0; }
+  ::-webkit-scrollbar-thumb { background: #e8c98e; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #d4a65a; }
+
+  /* ── 浮动粒子 ── */
+  .particles {
     position: fixed;
-    font-size: 120px;
-    opacity: 0.06;
-    top: 10%;
-    left: -20px;
-    transform: rotate(-20deg);
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 0;
+    z-index: 9999;
   }
-  body::after {
-    content: "🐾";
-    position: fixed;
-    font-size: 150px;
-    opacity: 0.05;
-    bottom: 5%;
-    right: -30px;
-    transform: rotate(25deg);
-    pointer-events: none;
-    z-index: 0;
+  .particle {
+    position: absolute;
+    font-size: 24px;
+    animation: floatUp 6s linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.7; }
+    100% { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
   }
 
-  /* ── 导航 ── */
+  /* ── 导航栏 ── */
   nav {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(10px);
-    border-bottom: 3px solid #f0c78e;
-    padding: 16px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 12px 0;
+    background: rgba(255,251,244,0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(200,160,100,0.2);
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    padding: 8px 0;
+    box-shadow: 0 2px 20px rgba(140,100,50,0.12);
+  }
+  nav .nav-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
     display: flex;
     justify-content: center;
-    gap: 40px;
+    align-items: center;
+    gap: 32px;
   }
   nav a {
     text-decoration: none;
-    color: #8b6f47;
-    font-size: 1.05rem;
+    color: #6b4c2a;
     font-weight: 600;
-    padding: 6px 16px;
+    font-size: 0.95rem;
+    padding: 6px 14px;
     border-radius: 20px;
-    transition: all 0.25s;
+    transition: all 0.3s;
+    position: relative;
   }
-  nav a:hover {
-    background: #fce4c8;
-    color: #5c3a1e;
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 60%;
+    height: 2px;
+    background: #d4a65a;
+    border-radius: 1px;
+    transition: transform 0.3s;
   }
+  nav a:hover { color: #3d2210; }
+  nav a:hover::after { transform: translateX(-50%) scaleX(1); }
 
   /* ── 英雄区 ── */
   .hero {
-    text-align: center;
-    padding: 80px 24px 60px;
-    position: relative;
-    z-index: 1;
-  }
-  .hero .avatar-frame {
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    border: 6px solid #f0c78e;
-    background: #fff5e8;
-    margin: 0 auto 28px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 32px rgba(180, 140, 90, 0.25);
-    transition: transform 0.4s;
-  }
-  .hero .avatar-frame:hover {
-    transform: scale(1.05) rotate(-3deg);
-  }
-  .hero .avatar-frame .placeholder {
-    text-align: center;
-    color: #c4a87a;
-    font-size: 0.9rem;
-    line-height: 1.6;
-  }
-  .hero .avatar-frame .placeholder .cat-emoji {
-    font-size: 60px;
-    display: block;
-    margin-bottom: 6px;
-  }
-  .hero h1 {
-    font-size: 3rem;
-    color: #6b4c2a;
-    margin-bottom: 6px;
-  }
-  .hero h1 .paw {
-    display: inline-block;
-    animation: pawBounce 0.6s ease-in-out infinite alternate;
-  }
-  @keyframes pawBounce {
-    from { transform: translateY(0); }
-    to   { transform: translateY(-8px); }
-  }
-  .hero .tagline {
-    font-size: 1.2rem;
-    color: #a0845c;
-    font-style: italic;
-  }
-
-  /* ── 分区 ── */
-  section {
-    max-width: 800px;
-    margin: 0 auto 60px;
-    padding: 0 24px;
-    position: relative;
-    z-index: 1;
-  }
-  section h2 {
-    font-size: 1.7rem;
-    color: #6b4c2a;
-    margin-bottom: 24px;
-    padding-left: 16px;
-    border-left: 5px solid #f0c78e;
-  }
-
-  /* ── 关于我卡片 ── */
-  .about-card {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(6px);
-    border-radius: 20px;
-    padding: 36px 32px;
-    box-shadow: 0 4px 20px rgba(160, 120, 70, 0.12);
-    border: 2px dashed #f0d8b0;
-    position: relative;
-    overflow: hidden;
-  }
-  .about-card::before {
-    content: "💬";
-    position: absolute;
-    font-size: 80px;
-    opacity: 0.08;
-    top: -10px;
-    right: 20px;
-    pointer-events: none;
-  }
-  .about-card p {
-    margin-bottom: 14px;
-    font-size: 1.05rem;
-  }
-  .about-card .highlight {
-    background: linear-gradient(180deg, transparent 60%, #fce4c8 60%);
-    padding: 0 4px;
-    font-weight: 600;
-  }
-
-  /* ── 技能条 ── */
-  .skill-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 18px;
-    gap: 16px;
-  }
-  .skill-label {
-    width: 110px;
-    text-align: right;
-    font-weight: 600;
-    color: #6b4c2a;
-    flex-shrink: 0;
-  }
-  .skill-bar-bg {
-    flex: 1;
-    height: 22px;
-    background: #f5e6d3;
-    border-radius: 11px;
-    overflow: hidden;
-  }
-  .skill-bar-fg {
-    height: 100%;
-    border-radius: 11px;
-    background: linear-gradient(90deg, #f0c78e, #e8a860);
-    transition: width 1s ease;
-  }
-
-  /* ── 照片墙 ── */
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-  }
-  .gallery .photo-slot {
-    aspect-ratio: 1 / 1;
-    border-radius: 16px;
-    background: #fff5e8;
-    border: 3px dashed #e8d0a8;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 24px 80px;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.08;
+    background:
+      radial-gradient(circle at 20% 80%, #f0c040 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, #e8a860 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, #f8d8b8 0%, transparent 60%);
+  }
+  .hero .avatar-wrap {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 28px;
+  }
+  .hero .avatar-outer {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    padding: 6px;
+    background: linear-gradient(135deg, #f0c78e, #e8a860, #d4943c, #f0c78e);
+    background-size: 300% 300%;
+    animation: borderShine 4s ease infinite;
+  }
+  @keyframes borderShine {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .hero .avatar-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #fff;
+  }
+  .hero .avatar-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s;
+  }
+  .hero .avatar-inner:hover img {
+    transform: scale(1.08);
+  }
+  .hero h1 {
+    font-size: 3.5rem;
+    color: #4a2a10;
+    z-index: 1;
+    margin-bottom: 4px;
+    letter-spacing: 2px;
+  }
+  .hero h1 .wave {
+    display: inline-block;
+    animation: wavePaw 0.7s ease-in-out infinite alternate;
+  }
+  @keyframes wavePaw {
+    from { transform: translateY(0) rotate(0deg); }
+    to   { transform: translateY(-12px) rotate(8deg); }
+  }
+  .hero .subtitle {
+    font-size: 1.15rem;
+    color: #9b7a5a;
+    z-index: 1;
+    font-style: italic;
+    letter-spacing: 1px;
+  }
+  .hero .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    animation: bounce 1.8s ease infinite;
+  }
+  .hero .scroll-hint span { font-size: 0.8rem; color: #bba27a; }
+  .hero .scroll-hint .arrow { font-size: 20px; }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+
+  /* ── 分区标题 ── */
+  section {
+    max-width: 1000px;
+    margin: 0 auto 80px;
+    padding: 0 28px;
+    position: relative;
+    z-index: 1;
+  }
+  .section-head {
     text-align: center;
-    padding: 20px;
-    color: #b8976e;
-    font-size: 0.9rem;
-    transition: all 0.3s;
-    cursor: default;
+    margin-bottom: 48px;
+  }
+  .section-head .badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #8b6f47;
+    background: #fef0dc;
+    border: 1px solid #f0d8b0;
+    margin-bottom: 12px;
+  }
+  .section-head h2 {
+    font-size: 2rem;
+    color: #4a2a10;
+    margin-bottom: 6px;
+  }
+  .section-head .line {
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #f0c78e, #e8a860);
+    border-radius: 2px;
+    margin: 0 auto;
+  }
+
+  /* ── 自我介绍卡片 ── */
+  .about-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 44px 36px;
+    border: 1px solid rgba(200,160,100,0.25);
+    box-shadow: 0 8px 40px rgba(140,100,50,0.08);
+    position: relative;
     overflow: hidden;
   }
-  .gallery .photo-slot:hover {
-    border-color: #f0c78e;
-    background: #fffbf4;
-    box-shadow: 0 4px 16px rgba(160, 120, 60, 0.15);
+  .about-card::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(240,200,130,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
   }
-  .gallery .photo-slot .hint-icon {
+  .about-card p {
+    font-size: 1.08rem;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s;
+  }
+  .about-card p:hover {
+    transform: translateX(6px);
+  }
+  .about-card .highlight {
+    background: linear-gradient(180deg, transparent 58%, #fce4c8 58%);
+    padding: 0 4px;
+    font-weight: 700;
+    color: #5c3a1e;
+  }
+
+  /* ── 技能 ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .skill-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 24px 22px;
+    border: 1px solid #f0dcc0;
+    transition: all 0.35s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 36px rgba(160,120,60,0.15);
+    border-color: #e8c98e;
+  }
+  .skill-card:active { transform: scale(0.97); }
+  .skill-card .skill-emoji { font-size: 36px; margin-bottom: 8px; }
+  .skill-card .skill-name { font-weight: 700; color: #4a2a10; margin-bottom: 8px; }
+  .skill-card .skill-bar-wrap {
+    height: 12px;
+    background: #f5ead8;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .skill-card .skill-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #f0c78e, #e8a860);
+    width: 0;
+    transition: width 1.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .skill-card .skill-pct { text-align: right; font-size: 0.8rem; color: #b8976e; margin-top: 4px; }
+  .skill-card.reveal .skill-bar-fill { /* JS triggers */ }
+
+  /* ── 照片画廊 ── */
+  .gallery-masonry {
+    columns: 3;
+    column-gap: 16px;
+  }
+  @media (max-width: 768px) { .gallery-masonry { columns: 2; } }
+  @media (max-width: 480px) { .gallery-masonry { columns: 1; } }
+
+  .gallery-card {
+    break-inside: avoid;
+    margin-bottom: 16px;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.4s;
+    border: 3px solid transparent;
+  }
+  .gallery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(140,90,30,0.2);
+    border-color: #f0c78e;
+  }
+  .gallery-card img {
+    width: 100%;
+    display: block;
+    transition: transform 0.6s;
+    background: #f5ead8;
+  }
+  .gallery-card:hover img { transform: scale(1.06); }
+  .gallery-card .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.35s;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+  }
+  .gallery-card:hover .overlay { opacity: 1; }
+  .gallery-card .overlay span {
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  }
+
+  /* ── Lightbox ── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .lightbox.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .lightbox .lb-img {
+    max-width: 85vw;
+    max-height: 80vh;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    transform: scale(0.9);
+    transition: transform 0.4s;
+  }
+  .lightbox.open .lb-img { transform: scale(1); }
+  .lightbox .lb-close {
+    position: absolute;
+    top: 20px; right: 28px;
     font-size: 40px;
-    margin-bottom: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.3s;
+    z-index: 1;
+  }
+  .lightbox .lb-close:hover { transform: scale(1.2) rotate(90deg); }
+  .lightbox .lb-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 48px;
+    color: #fff;
+    cursor: pointer;
+    padding: 20px;
+    transition: all 0.3s;
+    user-select: none;
+  }
+  .lightbox .lb-nav:hover { color: #f0c78e; transform: translateY(-50%) scale(1.2); }
+  .lightbox .lb-prev { left: 10px; }
+  .lightbox .lb-next { right: 10px; }
+  .lightbox .lb-counter {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
   }
 
   /* ── 时间线 ── */
   .timeline {
     list-style: none;
     position: relative;
+    max-width: 720px;
+    margin: 0 auto;
   }
   .timeline::before {
     content: "";
     position: absolute;
-    left: 16px;
-    top: 0;
-    bottom: 0;
+    left: 32px;
+    top: 0; bottom: 0;
     width: 3px;
-    background: #f0d8b0;
+    background: linear-gradient(to bottom, #f0c78e, #e8a860, #f0d8b0);
+    border-radius: 2px;
   }
   .timeline li {
-    padding-left: 48px;
+    padding-left: 80px;
     position: relative;
-    margin-bottom: 28px;
+    margin-bottom: 36px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
   }
-  .timeline li::before {
-    content: "🐟";
+  .timeline li.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .timeline li .dot {
     position: absolute;
-    left: 0;
-    top: 0;
-    font-size: 20px;
-    background: #fef7e0;
+    left: 20px;
+    top: 4px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    padding: 4px;
+    background: #fff;
+    border: 3px solid #e8a860;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.3s;
+    z-index: 1;
+  }
+  .timeline li:hover .dot {
+    background: #e8a860;
+    transform: scale(1.3);
   }
   .timeline .year {
     font-weight: 700;
-    color: #8b6f47;
+    color: #8b5e3c;
+    font-size: 1.05rem;
+    margin-bottom: 4px;
   }
 
   /* ── 页脚 ── */
   footer {
     text-align: center;
-    padding: 40px 24px;
-    color: #b8976e;
-    font-size: 0.95rem;
-    border-top: 2px solid #f5e0c0;
+    padding: 48px 24px;
+    background: linear-gradient(0deg, #fef0dc 0%, #fdf6ed 100%);
+    border-top: 1px solid #f0dcc0;
     position: relative;
     z-index: 1;
   }
-  footer .fish {
-    display: inline-block;
-    animation: swim 2s ease-in-out infinite;
+  footer .fish-group {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
   }
+  footer .fish-group span {
+    display: inline-block;
+    animation: swim 2.5s ease-in-out infinite;
+    font-size: 22px;
+  }
+  footer .fish-group span:nth-child(2) { animation-delay: 0.4s; }
+  footer .fish-group span:nth-child(3) { animation-delay: 0.8s; }
+  footer .fish-group span:nth-child(4) { animation-delay: 1.2s; }
+  footer .fish-group span:nth-child(5) { animation-delay: 1.6s; }
   @keyframes swim {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(6px); }
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    30%  { transform: translateY(-12px) rotate(-5deg); }
+    60%  { transform: translateY(2px) rotate(3deg); }
+  }
+  footer p { color: #b8976e; font-size: 0.95rem; }
+
+  /* ── 回到顶部 ── */
+  .back-to-top {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: #e8a860;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: all 0.4s;
+    box-shadow: 0 4px 16px rgba(180,120,50,0.35);
+  }
+  .back-to-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .back-to-top:hover {
+    background: #d4943c;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(180,120,50,0.45);
   }
 
   /* ── 响应式 ── */
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     .hero h1 { font-size: 2.2rem; }
-    .hero .avatar-frame { width: 160px; height: 160px; }
-    nav { gap: 16px; }
-    nav a { font-size: 0.9rem; padding: 4px 10px; }
-    .skill-row { flex-direction: column; align-items: flex-start; gap: 6px; }
-    .skill-label { text-align: left; }
+    .hero .avatar-outer { width: 170px; height: 170px; }
+    nav .nav-inner { gap: 12px; }
+    nav a { font-size: 0.8rem; padding: 4px 8px; }
+    .about-card { padding: 28px 20px; }
+    .about-card p { font-size: 0.95rem; }
+    .lightbox .lb-nav { font-size: 32px; padding: 10px; }
   }
 </style>
 </head>
 <body>
 
-<nav>
-  <a href="#home">🏠 小窝</a>
-  <a href="#about">🐱 关于我</a>
-  <a href="#skills">⭐ 擅长的事</a>
-  <a href="#gallery">📸 照片墙</a>
-  <a href="#story">📖 我的故事</a>
+<!-- 浮动粒子 -->
+<div class="particles" id="particles"></div>
+
+<!-- 导航 -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero">🏠 小窝</a>
+    <a href="#about">🐱 关于我</a>
+    <a href="#skills">⭐ 擅长</a>
+    <a href="#gallery">📸 帅照</a>
+    <a href="#story">📖 故事</a>
+  </div>
 </nav>
 
 <!-- ==================== 英雄区 ==================== -->
-<section class="hero" id="home">
-  <div class="avatar-frame">
-    <!--
-    ╔══════════════════════════════════════╗
-    ║  📌 照片 1：头像照                   ║
-    ║  把照片放到 images/ 文件夹里，       ║
-    ║  命名为 avatar.jpg，                ║
-    ║  然后把下面 <div> 替换为：           ║
-    ║  <img src="images/avatar.jpg"       ║
-    ║       alt="骑士的头像"               ║
-    ║       style="width:100%;height:100%; ║
-    ║              object-fit:cover;">     ║
-    ╚══════════════════════════════════════╝
-    -->
-    <div class="placeholder">
-      <span class="cat-emoji">🐱</span>
-      这是我的<br>帅照位置
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="avatar-wrap">
+    <div class="avatar-outer">
+      <div class="avatar-inner">
+        <img src="images/be6be02db8e1e00aadd3a6866c8ca4c3.jpg" alt="骑士的头像">
+      </div>
     </div>
   </div>
-  <h1>骑士 <span class="paw">🐾</span></h1>
-  <p class="tagline">一只四岁大猫咪 · 睡懒觉专业户 · 兜风爱好者</p>
+  <h1>骑士 <span class="wave">🐾</span></h1>
+  <p class="subtitle">一只四岁大猫咪 · 睡懒觉专业户 · 兜风爱好者</p>
+  <div class="scroll-hint">
+    <span>往下看看我的喵生</span>
+    <span class="arrow">⬇</span>
+  </div>
 </section>
 
 <!-- ==================== 关于我 ==================== -->
 <section id="about">
-  <h2>🐱 关于我</h2>
+  <div class="section-head">
+    <div class="badge">About Me</div>
+    <h2>🐱 关于我</h2>
+    <div class="line"></div>
+  </div>
   <div class="about-card">
     <p>
-      喵～你好呀！我叫<span class="highlight">骑士</span>，今年 <span class="highlight">4 岁</span>啦（换算成人类的话，大概 32 岁？反正我还年轻！）。
+      喵～你好呀！我叫<span class="highlight">骑士</span>，今年 <span class="highlight">4 岁</span>啦。换算成人类的话大概 32 岁——不过我看上去可年轻多了，毕竟每天睡 18 个小时，保养得相当到位！
     </p>
     <p>
-      我跟<span class="highlight">爸爸妈妈</span>住在一起，日子过得可幸福了。每天早上阳光照进窗户的时候，爸爸会挠挠我的下巴，妈妈会给我准备好吃的小鱼干——这就是传说中的猫生赢家吧？
+      我和<span class="highlight">爸爸妈妈</span>住在一起，日子过得可幸福了。每天早上阳光照进窗户，爸爸会挠挠我的下巴，妈妈会给我准备好吃的——这就是传说中的<span class="highlight">猫生赢家</span>吧？他们说我是全家最会享受生活的成员，我觉得这个评价很中肯。
     </p>
     <p>
-      我最最最喜欢的事情就是<span class="highlight">睡懒觉</span>💤，沙发角、阳台垫子、爸爸的电脑键盘上……世界上任何一个角落都可以是我的五星级床铺。睡醒了伸个懒腰，打个哈欠，再换个姿势接着睡，一整天就这样过去了，完美！
+      我最最最喜欢的事情就是<span class="highlight">睡懒觉</span>💤，沙发角、阳台垫子、爸爸的电脑键盘上……世界上任何一个角落都可以是我的五星级床铺。睡醒了伸个懒腰，打个哈欠，再换个姿势接着睡——完美的一天就这样安排上了！
     </p>
     <p>
-      第二喜欢的事情是<span class="highlight">出去兜风</span>🚗！每次爸爸拿出猫包我就激动得尾巴都翘起来了。趴在车窗边看外面的小鸟和树影飞快后退，那种感觉——喵的，太棒了！
+      第二喜欢的事情是<span class="highlight">出去兜风</span>🚗，每次爸爸拿出猫包我就激动得尾巴都翘起来了。趴在车窗边看小鸟和树影飞快后退，风透过缝隙吹到胡须上——那种感觉，喵的，太上头了！
     </p>
   </div>
 </section>
 
 <!-- ==================== 擅长的事 ==================== -->
 <section id="skills">
-  <h2>⭐ 我擅长的事</h2>
-
-  <div class="skill-row">
-    <span class="skill-label">😴 睡懒觉</span>
-    <div class="skill-bar-bg">
-      <div class="skill-bar-fg" style="width: 98%;"></div>
-    </div>
+  <div class="section-head">
+    <div class="badge">My Powers</div>
+    <h2>⭐ 我擅长的事</h2>
+    <div class="line"></div>
   </div>
-
-  <div class="skill-row">
-    <span class="skill-label">🍽️ 吃小鱼干</span>
-    <div class="skill-bar-bg">
-      <div class="skill-bar-fg" style="width: 95%;"></div>
+  <div class="skills-grid">
+    <div class="skill-card" data-skill="98">
+      <div class="skill-emoji">😴</div>
+      <div class="skill-name">睡懒觉（世界级）</div>
+      <div class="skill-bar-wrap"><div class="skill-bar-fill"></div></div>
+      <div class="skill-pct">98%</div>
     </div>
-  </div>
-
-  <div class="skill-row">
-    <span class="skill-label">🐾 踩奶</span>
-    <div class="skill-bar-bg">
-      <div class="skill-bar-fg" style="width: 90%;"></div>
+    <div class="skill-card" data-skill="95">
+      <div class="skill-emoji">🍽️</div>
+      <div class="skill-name">吃小鱼干</div>
+      <div class="skill-bar-wrap"><div class="skill-bar-fill"></div></div>
+      <div class="skill-pct">95%</div>
     </div>
-  </div>
-
-  <div class="skill-row">
-    <span class="skill-label">🎾 追激光笔</span>
-    <div class="skill-bar-bg">
-      <div class="skill-bar-fg" style="width: 85%;"></div>
+    <div class="skill-card" data-skill="90">
+      <div class="skill-emoji">🐾</div>
+      <div class="skill-name">踩奶按摩师</div>
+      <div class="skill-bar-wrap"><div class="skill-bar-fill"></div></div>
+      <div class="skill-pct">90%</div>
     </div>
-  </div>
-
-  <div class="skill-row">
-    <span class="skill-label">🚗 出门兜风</span>
-    <div class="skill-bar-bg">
-      <div class="skill-bar-fg" style="width: 92%;"></div>
+    <div class="skill-card" data-skill="88">
+      <div class="skill-emoji">🎾</div>
+      <div class="skill-name">追激光小红点</div>
+      <div class="skill-bar-wrap"><div class="skill-bar-fill"></div></div>
+      <div class="skill-pct">88%</div>
     </div>
-  </div>
-
-  <div class="skill-row">
-    <span class="skill-label">😼 装高冷</span>
-    <div class="skill-bar-bg">
-      <div class="skill-bar-fg" style="width: 78%;"></div>
+    <div class="skill-card" data-skill="92">
+      <div class="skill-emoji">🚗</div>
+      <div class="skill-name">出门兜风探险</div>
+      <div class="skill-bar-wrap"><div class="skill-bar-fill"></div></div>
+      <div class="skill-pct">92%</div>
+    </div>
+    <div class="skill-card" data-skill="78">
+      <div class="skill-emoji">😼</div>
+      <div class="skill-name">装高冷（假装不在乎）</div>
+      <div class="skill-bar-wrap"><div class="skill-bar-fill"></div></div>
+      <div class="skill-pct">78%</div>
     </div>
   </div>
 </section>
 
-<!-- ==================== 照片墙 ==================== -->
+<!-- ==================== 照片画廊 ==================== -->
 <section id="gallery">
-  <h2>📸 我的照片墙</h2>
-  <p style="color:#a0845c; margin-bottom:24px; font-size:0.95rem;">
-    下面的方框都是照片位～把你的靓照放进 <code style="background:#fef0e4;padding:2px 8px;border-radius:6px;">images/</code> 文件夹，再替换掉提示文字就可以啦 🐾
-  </p>
-
-  <div class="gallery">
-
-    <!-- 照片 2：睡姿照 -->
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;"><img src="images/1cb7787ed87a33371d12ef6a7f2190bc.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div>
-
-    <!-- 照片 3：兜风照 -->
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;"><img src="images/37734386d6c4cd78debfc97d0455e7a7.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div>
-
-    <!-- 照片 4：全家福 -->
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;"><img src="images/39c69d14ddb99d790553c27587e93a1a.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div>
-
-    <!-- 照片 5：自由发挥 -->
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;"><img src="images/4fe5438f38bbce56d45e332208051eda.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div>
-
-  
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;">
-      <img src="images/63c537308a9eee632a981855ebb0f196.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
-    </div>
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;">
-      <img src="images/82984b747a4c32131e8b7149fdb8be94.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
-    </div>
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;">
-      <img src="images/87dcff681c6e3c3362d2499008286f6c.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
-    </div>
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;">
-      <img src="images/be6be02db8e1e00aadd3a6866c8ca4c3.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
-    </div>
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;">
-      <img src="images/dc37bdb5f753bcd185d8f32a3c4fc882.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
-    </div>
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;">
-      <img src="images/e7ace1191a86c09073409ca887aa33c2.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
-    </div>
-    <div class="photo-slot" style="padding:0;border:none;overflow:hidden;">
-      <img src="images/f6e28e7f2edd7868874d1f4e26947f2f.jpg" alt="骑士的照片" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
-    </div>
-</div>
+  <div class="section-head">
+    <div class="badge">Gallery</div>
+    <h2>📸 我的帅照合集</h2>
+    <div class="line"></div>
+    <p style="margin-top:12px; color:#a0845c; font-size:0.95rem;">点击任意照片可以放大看哦，按左右方向键切换～</p>
+  </div>
+  <div class="gallery-masonry" id="galleryGrid">
+    <!-- 照片由 JS 动态加载 -->
+  </div>
 </section>
 
-<!-- ==================== 我的故事 ==================== -->
+<!-- ==================== 时间线 ==================== -->
 <section id="story">
-  <h2>📖 我的喵生故事</h2>
+  <div class="section-head">
+    <div class="badge">My Story</div>
+    <h2>📖 我的喵生故事</h2>
+    <div class="line"></div>
+  </div>
   <ul class="timeline">
     <li>
-      <span class="year">2022 年 · 春天</span><br>
-      我出生啦！据说我的第一声「喵」特别洪亮，接生阿姨都说这只小橘将来不得了。那时候我眼睛都还没睁开呢，就已经会凭着本能去找妈妈的奶喝了——吃货属性从小拉满！
+      <div class="dot">🌸</div>
+      <div class="year">2022 年 · 春天</div>
+      我出生啦！据说第一声「喵」特别洪亮，接生阿姨说这只小橘将来不得了。那时候眼睛还没睁开，就已经凭直觉找妈妈的奶喝了——吃货属性从小拉满！
     </li>
     <li>
-      <span class="year">2022 年 · 夏天</span><br>
-      两个月大的时候，我遇到了现在的爸爸妈妈。他们一看到我就走不动路了，爸爸把我捧起来的时候手都在抖（后来他说是太激动了）。从那天起，我有了名字——<strong>骑士</strong>。
+      <div class="dot">🏡</div>
+      <div class="year">2022 年 · 夏天</div>
+      两个月大时遇到现在的爸爸妈妈。他们一见我就走不动路了，爸爸把我捧起来时手都在抖（后来他说是太激动）。从那天起，我有了名字——<strong>骑士</strong>。
     </li>
     <li>
-      <span class="year">2023 年</span><br>
-      一岁生日那天，妈妈给我买了一个超大的猫爬架。我开心得上蹿下跳，结果一脚踩空从第三层滚到了地上……为了挽回面子，我马上站起来舔了舔爪子，假装什么都没发生。
+      <div class="dot">🎂</div>
+      <div class="year">2023 年</div>
+      一岁生日，妈妈买了个超大的猫爬架。我开心得上蹿下跳，结果一脚踩空从第三层滚下来……为了挽回面子，马上站起来舔了舔爪子，假装什么都没发生。
     </li>
     <li>
-      <span class="year">2024 年</span><br>
-      两岁那年第一次坐车出远门！一开始我还紧张地喵喵叫，后来发现车窗外的风景太有意思了——小鸟、大树、呼呼的风，从此我成了兜风狂魔，一看到猫包就自己钻进去。
+      <div class="dot">🌊</div>
+      <div class="year">2024 年</div>
+      第一次坐车出远门！一开始紧张得喵喵叫，后来发现车窗外的世界太精彩了——小鸟、大树、呼呼的风，从此成了兜风狂魔，一看到猫包就自己钻进去。
     </li>
     <li>
-      <span class="year">2026 年 · 现在</span><br>
-      四岁了，我依然每天睡得昏天黑地，吃得心满意足，偶尔被激光笔耍得团团转。爸爸说我胖了，但我选择性地屏蔽了这句话。总之——喵生圆满，继续幸福！
+      <div class="dot">🐟</div>
+      <div class="year">2026 年 · 现在</div>
+      四岁了！每天睡得昏天黑地，吃得心满意足，偶尔被激光笔耍得团团转。爸爸说我胖了——但我选择性地屏蔽了这句话。总之，喵生圆满，继续幸福！
     </li>
   </ul>
 </section>
 
+<!-- ==================== Lightbox ==================== -->
+<div class="lightbox" id="lightbox">
+  <span class="lb-close" id="lbClose">&times;</span>
+  <span class="lb-nav lb-prev" id="lbPrev">‹</span>
+  <span class="lb-nav lb-next" id="lbNext">›</span>
+  <img class="lb-img" id="lbImg" src="" alt="">
+  <span class="lb-counter" id="lbCounter"></span>
+</div>
+
+<!-- 回到顶部 -->
+<button class="back-to-top" id="backTop" title="回小窝">⬆</button>
+
 <footer>
+  <div class="fish-group">
+    <span>🐟</span><span>🐟</span><span>🐟</span><span>🐟</span><span>🐟</span>
+  </div>
   <p>🐾 骑士的小窝 · 由爸爸妈妈倾情打造</p>
-  <p>如有小鱼干赞助需求，请随时投喂 <span class="fish">🐟</span></p>
+  <p style="font-size:0.85rem; margin-top:4px;">如有小鱼干赞助需求，请随时投喂～</p>
 </footer>
+
+<script>
+  // ── 照片数据 ──
+  const photos = [
+    "images/1cb7787ed87a33371d12ef6a7f2190bc.jpg",
+    "images/37734386d6c4cd78debfc97d0455e7a7.jpg",
+    "images/39c69d14ddb99d790553c27587e93a1a.jpg",
+    "images/4fe5438f38bbce56d45e332208051eda.jpg",
+    "images/63c537308a9eee632a981855ebb0f196.jpg",
+    "images/82984b747a4c32131e8b7149fdb8be94.jpg",
+    "images/87dcff681c6e3c3362d2499008286f6c.jpg",
+    "images/be6be02db8e1e00aadd3a6866c8ca4c3.jpg",
+    "images/dc37bdb5f753bcd185d8f32a3c4fc882.jpg",
+    "images/e7ace1191a86c09073409ca887aa33c2.jpg",
+    "images/f6e28e7f2edd7868874d1f4e26947f2f.jpg",
+  ];
+
+  const captions = [
+    "优雅侧颜杀", "暗中观察 👀", "阳光下的美喵子",
+    "慵懒午后时光", "瞪大眼卖萌中", "伸个懒腰～",
+    "帅到模糊", "本喵的证件照", "沙发上瘫成一滩猫",
+    "窗边沉思喵生", "霸气外露",
+  ];
+
+  // ── 渲染画廊 ──
+  const grid = document.getElementById('galleryGrid');
+  photos.forEach((src, i) => {
+    const card = document.createElement('div');
+    card.className = 'gallery-card';
+    card.innerHTML = `
+      <img src="${src}" alt="骑士照片 ${i+1}" loading="lazy">
+      <div class="overlay"><span>${captions[i] || '骑士的帅照'}</span></div>
+    `;
+    card.addEventListener('click', () => openLightbox(i));
+    grid.appendChild(card);
+  });
+
+  // ── Lightbox ──
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCounter = document.getElementById('lbCounter');
+  let lbIndex = 0;
+
+  function openLightbox(i) {
+    lbIndex = i;
+    lbImg.src = photos[i];
+    lbCounter.textContent = `${i+1} / ${photos.length}`;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function lbPrev() { lbIndex = (lbIndex - 1 + photos.length) % photos.length; lbImg.src = photos[lbIndex]; lbCounter.textContent = `${lbIndex+1} / ${photos.length}`; }
+  function lbNext() { lbIndex = (lbIndex + 1) % photos.length; lbImg.src = photos[lbIndex]; lbCounter.textContent = `${lbIndex+1} / ${photos.length}`; }
+
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbPrev').addEventListener('click', (e) => { e.stopPropagation(); lbPrev(); });
+  document.getElementById('lbNext').addEventListener('click', (e) => { e.stopPropagation(); lbNext(); });
+  lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lbPrev();
+    if (e.key === 'ArrowRight') lbNext();
+  });
+
+  // ── 触摸滑动（Lightbox） ──
+  let touchStartX = 0;
+  lb.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  lb.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 60) { diff > 0 ? lbNext() : lbPrev(); }
+  });
+
+  // ── 技能条滚动动画 ──
+  const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const card = entry.target;
+        const pct = card.dataset.skill;
+        const bar = card.querySelector('.skill-bar-fill');
+        bar.style.width = pct + '%';
+        skillObserver.unobserve(card);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.skill-card').forEach(card => skillObserver.observe(card));
+
+  // ── 时间线滚动动画 ──
+  const tlObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        tlObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25 });
+
+  document.querySelectorAll('.timeline li').forEach(li => tlObserver.observe(li));
+
+  // ── 导航栏阴影 ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+    document.getElementById('backTop').classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // ── 回到顶部 ──
+  document.getElementById('backTop').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ── 浮动粒子 ──
+  const particlesEl = document.getElementById('particles');
+  const emojis = ['🐾', '🐟', '🐱', '✨', '💤', '🌙', '🎀', '🐾'];
+  setInterval(() => {
+    const p = document.createElement('span');
+    p.className = 'particle';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (4 + Math.random() * 8) + 's';
+    p.style.fontSize = (16 + Math.random() * 28) + 'px';
+    particlesEl.appendChild(p);
+    setTimeout(() => p.remove(), 10000);
+  }, 1200);
+
+  // ── 平滑锚点滚动 ──
+  document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
