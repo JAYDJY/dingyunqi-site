@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云起的个人主页</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">☁️ 云起</a>
+            <ul class="nav-links">
+                <li><a href="#about">关于</a></li>
+                <li><a href="#skills">技能</a></li>
+                <li><a href="#projects">项目</a></li>
+                <li><a href="#contact">联系</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="home">
+        <div class="header-content">
+            <div class="avatar">
+                <img src="images/avatar-placeholder.svg" alt="头像">
+            </div>
+            <h1>你好，我是 <span class="highlight">云起</span></h1>
+            <p class="subtitle">热爱创造 / 终身学习者</p>
+            <p class="bio">行到水穷处，坐看云起时。</p>
+            <div class="header-buttons">
+                <a href="#projects" class="btn btn-primary">查看作品</a>
+                <a href="#contact" class="btn btn-outline">联系我</a>
+            </div>
+        </div>
+        <div class="scroll-hint">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </header>
+
+    <section id="about">
+        <h2 class="section-title">关于我</h2>
+        <div class="about-content">
+            <p>你好，我是云起。喜欢研究各种有意思的技术，相信代码可以让世界变得更美好。</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="year">🚀 持续学习中</span>
+                    <span class="desc">探索前端、后端、AI 等一切有趣的技术</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="year">💡 兴趣爱好</span>
+                    <span class="desc">写代码、阅读、旅行、摄影</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="year">🎯 目标</span>
+                    <span class="desc">做出让人眼前一亮的作品</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2 class="section-title">技能</h2>
+        <div class="skills-grid">
+            <div class="skill-card"><i class="fab fa-html5"></i><h3>HTML5</h3></div>
+            <div class="skill-card"><i class="fab fa-css3-alt"></i><h3>CSS3</h3></div>
+            <div class="skill-card"><i class="fab fa-js"></i><h3>JavaScript</h3></div>
+            <div class="skill-card"><i class="fab fa-react"></i><h3>React</h3></div>
+            <div class="skill-card"><i class="fab fa-python"></i><h3>Python</h3></div>
+            <div class="skill-card"><i class="fab fa-figma"></i><h3>Figma</h3></div>
+            <div class="skill-card"><i class="fab fa-git-alt"></i><h3>Git</h3></div>
+            <div class="skill-card"><i class="fas fa-database"></i><h3>SQL</h3></div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title">项目作品</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-img" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <div class="project-info">
+                    <h3>任务管理 App</h3>
+                    <p>一个简洁好用的待办事项应用，支持拖拽排序和标签分类。</p>
+                    <div class="project-tags"><span>React</span><span>TypeScript</span><span>Tailwind</span></div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-img" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-cloud-sun"></i>
+                </div>
+                <div class="project-info">
+                    <h3>天气预报</h3>
+                    <p>调用公开 API，展示实时天气和未来 7 天预报，支持城市搜索。</p>
+                    <div class="project-tags"><span>Vue</span><span>API</span><span>Chart.js</span></div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-img" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="fas fa-blog"></i>
+                </div>
+                <div class="project-info">
+                    <h3>个人博客</h3>
+                    <p>基于 Markdown 的静态博客，自动生成目录和代码高亮。</p>
+                    <div class="project-tags"><span>Next.js</span><span>MDX</span><span>Vercel</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">联系我</h2>
+        <div class="contact-content">
+            <p>欢迎交流合作，随时找我聊天 ☕</p>
+            <div class="contact-links">
+                <a href="mailto:dingyunqi@dingyunqi.top" class="contact-item"><i class="fas fa-envelope"></i><span>dingyunqi@dingyunqi.top</span></a>
+                <a href="https://github.com/dingyunqi" target="_blank" class="contact-item"><i class="fab fa-github"></i><span>GitHub</span></a>
+                <a href="#" class="contact-item"><i class="fab fa-twitter"></i><span>Twitter</span></a>
+                <a href="#" class="contact-item"><i class="fab fa-linkedin"></i><span>LinkedIn</span></a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 云起. 用 ❤️ 和代码构建.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
