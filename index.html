@@ -1,131 +1,493 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>云起的个人主页</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>骑士的小窝 🐱</title>
+<style>
+  :root { color-scheme: light; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: linear-gradient(135deg, #fef7e0 0%, #fce4c8 30%, #f8d8b8 60%, #fef0e4 100%);
+    color: #5c4a3a;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  /* ── 浮动猫爪装饰 ── */
+  body::before {
+    content: "🐾";
+    position: fixed;
+    font-size: 120px;
+    opacity: 0.06;
+    top: 10%;
+    left: -20px;
+    transform: rotate(-20deg);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: "🐾";
+    position: fixed;
+    font-size: 150px;
+    opacity: 0.05;
+    bottom: 5%;
+    right: -30px;
+    transform: rotate(25deg);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── 导航 ── */
+  nav {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 3px solid #f0c78e;
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+  }
+  nav a {
+    text-decoration: none;
+    color: #8b6f47;
+    font-size: 1.05rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 20px;
+    transition: all 0.25s;
+  }
+  nav a:hover {
+    background: #fce4c8;
+    color: #5c3a1e;
+  }
+
+  /* ── 英雄区 ── */
+  .hero {
+    text-align: center;
+    padding: 80px 24px 60px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero .avatar-frame {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 6px solid #f0c78e;
+    background: #fff5e8;
+    margin: 0 auto 28px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(180, 140, 90, 0.25);
+    transition: transform 0.4s;
+  }
+  .hero .avatar-frame:hover {
+    transform: scale(1.05) rotate(-3deg);
+  }
+  .hero .avatar-frame .placeholder {
+    text-align: center;
+    color: #c4a87a;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .hero .avatar-frame .placeholder .cat-emoji {
+    font-size: 60px;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .hero h1 {
+    font-size: 3rem;
+    color: #6b4c2a;
+    margin-bottom: 6px;
+  }
+  .hero h1 .paw {
+    display: inline-block;
+    animation: pawBounce 0.6s ease-in-out infinite alternate;
+  }
+  @keyframes pawBounce {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-8px); }
+  }
+  .hero .tagline {
+    font-size: 1.2rem;
+    color: #a0845c;
+    font-style: italic;
+  }
+
+  /* ── 分区 ── */
+  section {
+    max-width: 800px;
+    margin: 0 auto 60px;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+  section h2 {
+    font-size: 1.7rem;
+    color: #6b4c2a;
+    margin-bottom: 24px;
+    padding-left: 16px;
+    border-left: 5px solid #f0c78e;
+  }
+
+  /* ── 关于我卡片 ── */
+  .about-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(6px);
+    border-radius: 20px;
+    padding: 36px 32px;
+    box-shadow: 0 4px 20px rgba(160, 120, 70, 0.12);
+    border: 2px dashed #f0d8b0;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-card::before {
+    content: "💬";
+    position: absolute;
+    font-size: 80px;
+    opacity: 0.08;
+    top: -10px;
+    right: 20px;
+    pointer-events: none;
+  }
+  .about-card p {
+    margin-bottom: 14px;
+    font-size: 1.05rem;
+  }
+  .about-card .highlight {
+    background: linear-gradient(180deg, transparent 60%, #fce4c8 60%);
+    padding: 0 4px;
+    font-weight: 600;
+  }
+
+  /* ── 技能条 ── */
+  .skill-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+    gap: 16px;
+  }
+  .skill-label {
+    width: 110px;
+    text-align: right;
+    font-weight: 600;
+    color: #6b4c2a;
+    flex-shrink: 0;
+  }
+  .skill-bar-bg {
+    flex: 1;
+    height: 22px;
+    background: #f5e6d3;
+    border-radius: 11px;
+    overflow: hidden;
+  }
+  .skill-bar-fg {
+    height: 100%;
+    border-radius: 11px;
+    background: linear-gradient(90deg, #f0c78e, #e8a860);
+    transition: width 1s ease;
+  }
+
+  /* ── 照片墙 ── */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  .gallery .photo-slot {
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    background: #fff5e8;
+    border: 3px dashed #e8d0a8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    color: #b8976e;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    cursor: default;
+    overflow: hidden;
+  }
+  .gallery .photo-slot:hover {
+    border-color: #f0c78e;
+    background: #fffbf4;
+    box-shadow: 0 4px 16px rgba(160, 120, 60, 0.15);
+  }
+  .gallery .photo-slot .hint-icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+  }
+
+  /* ── 时间线 ── */
+  .timeline {
+    list-style: none;
+    position: relative;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 16px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #f0d8b0;
+  }
+  .timeline li {
+    padding-left: 48px;
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .timeline li::before {
+    content: "🐟";
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 20px;
+    background: #fef7e0;
+    border-radius: 50%;
+    padding: 4px;
+  }
+  .timeline .year {
+    font-weight: 700;
+    color: #8b6f47;
+  }
+
+  /* ── 页脚 ── */
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    color: #b8976e;
+    font-size: 0.95rem;
+    border-top: 2px solid #f5e0c0;
+    position: relative;
+    z-index: 1;
+  }
+  footer .fish {
+    display: inline-block;
+    animation: swim 2s ease-in-out infinite;
+  }
+  @keyframes swim {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(6px); }
+  }
+
+  /* ── 响应式 ── */
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 2.2rem; }
+    .hero .avatar-frame { width: 160px; height: 160px; }
+    nav { gap: 16px; }
+    nav a { font-size: 0.9rem; padding: 4px 10px; }
+    .skill-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .skill-label { text-align: left; }
+  }
+</style>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <a href="#" class="logo">☁️ 云起</a>
-            <ul class="nav-links">
-                <li><a href="#about">关于</a></li>
-                <li><a href="#skills">技能</a></li>
-                <li><a href="#projects">项目</a></li>
-                <li><a href="#contact">联系</a></li>
-            </ul>
-        </div>
-    </nav>
 
-    <header id="home">
-        <div class="header-content">
-            <div class="avatar">
-                <img src="images/avatar-placeholder.svg" alt="头像">
-            </div>
-            <h1>你好，我是 <span class="highlight">云起</span></h1>
-            <p class="subtitle">热爱创造 / 终身学习者</p>
-            <p class="bio">行到水穷处，坐看云起时。</p>
-            <div class="header-buttons">
-                <a href="#projects" class="btn btn-primary">查看作品</a>
-                <a href="#contact" class="btn btn-outline">联系我</a>
-            </div>
-        </div>
-        <div class="scroll-hint">
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </header>
+<nav>
+  <a href="#home">🏠 小窝</a>
+  <a href="#about">🐱 关于我</a>
+  <a href="#skills">⭐ 擅长的事</a>
+  <a href="#gallery">📸 照片墙</a>
+  <a href="#story">📖 我的故事</a>
+</nav>
 
-    <section id="about">
-        <h2 class="section-title">关于我</h2>
-        <div class="about-content">
-            <p>你好，我是云起。喜欢研究各种有意思的技术，相信代码可以让世界变得更美好。</p>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <span class="year">🚀 持续学习中</span>
-                    <span class="desc">探索前端、后端、AI 等一切有趣的技术</span>
-                </div>
-                <div class="timeline-item">
-                    <span class="year">💡 兴趣爱好</span>
-                    <span class="desc">写代码、阅读、旅行、摄影</span>
-                </div>
-                <div class="timeline-item">
-                    <span class="year">🎯 目标</span>
-                    <span class="desc">做出让人眼前一亮的作品</span>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ==================== 英雄区 ==================== -->
+<section class="hero" id="home">
+  <div class="avatar-frame">
+    <!--
+    ╔══════════════════════════════════════╗
+    ║  📌 照片 1：头像照                   ║
+    ║  把照片放到 images/ 文件夹里，       ║
+    ║  命名为 avatar.jpg，                ║
+    ║  然后把下面 <div> 替换为：           ║
+    ║  <img src="images/avatar.jpg"       ║
+    ║       alt="骑士的头像"               ║
+    ║       style="width:100%;height:100%; ║
+    ║              object-fit:cover;">     ║
+    ╚══════════════════════════════════════╝
+    -->
+    <div class="placeholder">
+      <span class="cat-emoji">🐱</span>
+      这是我的<br>帅照位置
+    </div>
+  </div>
+  <h1>骑士 <span class="paw">🐾</span></h1>
+  <p class="tagline">一只四岁大猫咪 · 睡懒觉专业户 · 兜风爱好者</p>
+</section>
 
-    <section id="skills">
-        <h2 class="section-title">技能</h2>
-        <div class="skills-grid">
-            <div class="skill-card"><i class="fab fa-html5"></i><h3>HTML5</h3></div>
-            <div class="skill-card"><i class="fab fa-css3-alt"></i><h3>CSS3</h3></div>
-            <div class="skill-card"><i class="fab fa-js"></i><h3>JavaScript</h3></div>
-            <div class="skill-card"><i class="fab fa-react"></i><h3>React</h3></div>
-            <div class="skill-card"><i class="fab fa-python"></i><h3>Python</h3></div>
-            <div class="skill-card"><i class="fab fa-figma"></i><h3>Figma</h3></div>
-            <div class="skill-card"><i class="fab fa-git-alt"></i><h3>Git</h3></div>
-            <div class="skill-card"><i class="fas fa-database"></i><h3>SQL</h3></div>
-        </div>
-    </section>
+<!-- ==================== 关于我 ==================== -->
+<section id="about">
+  <h2>🐱 关于我</h2>
+  <div class="about-card">
+    <p>
+      喵～你好呀！我叫<span class="highlight">骑士</span>，今年 <span class="highlight">4 岁</span>啦（换算成人类的话，大概 32 岁？反正我还年轻！）。
+    </p>
+    <p>
+      我跟<span class="highlight">爸爸妈妈</span>住在一起，日子过得可幸福了。每天早上阳光照进窗户的时候，爸爸会挠挠我的下巴，妈妈会给我准备好吃的小鱼干——这就是传说中的猫生赢家吧？
+    </p>
+    <p>
+      我最最最喜欢的事情就是<span class="highlight">睡懒觉</span>💤，沙发角、阳台垫子、爸爸的电脑键盘上……世界上任何一个角落都可以是我的五星级床铺。睡醒了伸个懒腰，打个哈欠，再换个姿势接着睡，一整天就这样过去了，完美！
+    </p>
+    <p>
+      第二喜欢的事情是<span class="highlight">出去兜风</span>🚗！每次爸爸拿出猫包我就激动得尾巴都翘起来了。趴在车窗边看外面的小鸟和树影飞快后退，那种感觉——喵的，太棒了！
+    </p>
+  </div>
+</section>
 
-    <section id="projects">
-        <h2 class="section-title">项目作品</h2>
-        <div class="projects-grid">
-            <div class="project-card">
-                <div class="project-img" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <i class="fas fa-tasks"></i>
-                </div>
-                <div class="project-info">
-                    <h3>任务管理 App</h3>
-                    <p>一个简洁好用的待办事项应用，支持拖拽排序和标签分类。</p>
-                    <div class="project-tags"><span>React</span><span>TypeScript</span><span>Tailwind</span></div>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-img" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    <i class="fas fa-cloud-sun"></i>
-                </div>
-                <div class="project-info">
-                    <h3>天气预报</h3>
-                    <p>调用公开 API，展示实时天气和未来 7 天预报，支持城市搜索。</p>
-                    <div class="project-tags"><span>Vue</span><span>API</span><span>Chart.js</span></div>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-img" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                    <i class="fas fa-blog"></i>
-                </div>
-                <div class="project-info">
-                    <h3>个人博客</h3>
-                    <p>基于 Markdown 的静态博客，自动生成目录和代码高亮。</p>
-                    <div class="project-tags"><span>Next.js</span><span>MDX</span><span>Vercel</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ==================== 擅长的事 ==================== -->
+<section id="skills">
+  <h2>⭐ 我擅长的事</h2>
 
-    <section id="contact">
-        <h2 class="section-title">联系我</h2>
-        <div class="contact-content">
-            <p>欢迎交流合作，随时找我聊天 ☕</p>
-            <div class="contact-links">
-                <a href="mailto:dingyunqi@dingyunqi.top" class="contact-item"><i class="fas fa-envelope"></i><span>dingyunqi@dingyunqi.top</span></a>
-                <a href="https://github.com/dingyunqi" target="_blank" class="contact-item"><i class="fab fa-github"></i><span>GitHub</span></a>
-                <a href="#" class="contact-item"><i class="fab fa-twitter"></i><span>Twitter</span></a>
-                <a href="#" class="contact-item"><i class="fab fa-linkedin"></i><span>LinkedIn</span></a>
-            </div>
-        </div>
-    </section>
+  <div class="skill-row">
+    <span class="skill-label">😴 睡懒觉</span>
+    <div class="skill-bar-bg">
+      <div class="skill-bar-fg" style="width: 98%;"></div>
+    </div>
+  </div>
 
-    <footer>
-        <p>&copy; 2026 云起. 用 ❤️ 和代码构建.</p>
-    </footer>
+  <div class="skill-row">
+    <span class="skill-label">🍽️ 吃小鱼干</span>
+    <div class="skill-bar-bg">
+      <div class="skill-bar-fg" style="width: 95%;"></div>
+    </div>
+  </div>
 
-    <script src="script.js"></script>
+  <div class="skill-row">
+    <span class="skill-label">🐾 踩奶</span>
+    <div class="skill-bar-bg">
+      <div class="skill-bar-fg" style="width: 90%;"></div>
+    </div>
+  </div>
+
+  <div class="skill-row">
+    <span class="skill-label">🎾 追激光笔</span>
+    <div class="skill-bar-bg">
+      <div class="skill-bar-fg" style="width: 85%;"></div>
+    </div>
+  </div>
+
+  <div class="skill-row">
+    <span class="skill-label">🚗 出门兜风</span>
+    <div class="skill-bar-bg">
+      <div class="skill-bar-fg" style="width: 92%;"></div>
+    </div>
+  </div>
+
+  <div class="skill-row">
+    <span class="skill-label">😼 装高冷</span>
+    <div class="skill-bar-bg">
+      <div class="skill-bar-fg" style="width: 78%;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 照片墙 ==================== -->
+<section id="gallery">
+  <h2>📸 我的照片墙</h2>
+  <p style="color:#a0845c; margin-bottom:24px; font-size:0.95rem;">
+    下面的方框都是照片位～把你的靓照放进 <code style="background:#fef0e4;padding:2px 8px;border-radius:6px;">images/</code> 文件夹，再替换掉提示文字就可以啦 🐾
+  </p>
+
+  <div class="gallery">
+
+    <!-- 照片 2：睡姿照 -->
+    <div class="photo-slot">
+      <!--
+      ╔══════════════════════════════════════╗
+      ║  📌 照片 2：睡懒觉的照片              ║
+      ║  把照片命名为 sleep.jpg 放到         ║
+      ║  images/ 文件夹，替换下面的内容。     ║
+      ╚══════════════════════════════════════╝
+      -->
+      <span class="hint-icon">😴</span>
+      睡懒觉的<br>英姿
+    </div>
+
+    <!-- 照片 3：兜风照 -->
+    <div class="photo-slot">
+      <!--
+      ╔══════════════════════════════════════╗
+      ║  📌 照片 3：兜风的照片                ║
+      ║  把照片命名为 ride.jpg 放到          ║
+      ║  images/ 文件夹，替换下面的内容。     ║
+      ╚══════════════════════════════════════╝
+      -->
+      <span class="hint-icon">🚗</span>
+      出去兜风<br>的帅样
+    </div>
+
+    <!-- 照片 4：全家福 -->
+    <div class="photo-slot">
+      <!--
+      ╔══════════════════════════════════════╗
+      ║  📌 照片 4：和爸爸妈妈的合照           ║
+      ║  把照片命名为 family.jpg 放到        ║
+      ║  images/ 文件夹，替换下面的内容。     ║
+      ╚══════════════════════════════════════╝
+      -->
+      <span class="hint-icon">👨‍👩‍👧</span>
+      和爸爸妈妈<br>的幸福合影
+    </div>
+
+    <!-- 照片 5：自由发挥 -->
+    <div class="photo-slot">
+      <!--
+      ╔══════════════════════════════════════╗
+      ║  📌 照片 5：任何你喜欢的照片           ║
+      ║  把照片命名为 extra.jpg 放到         ║
+      ║  images/ 文件夹，替换下面的内容。     ║
+      ╚══════════════════════════════════════╝
+      -->
+      <span class="hint-icon">✨</span>
+      更多帅照<br>敬请期待
+    </div>
+
+  </div>
+</section>
+
+<!-- ==================== 我的故事 ==================== -->
+<section id="story">
+  <h2>📖 我的喵生故事</h2>
+  <ul class="timeline">
+    <li>
+      <span class="year">2022 年 · 春天</span><br>
+      我出生啦！据说我的第一声「喵」特别洪亮，接生阿姨都说这只小橘将来不得了。那时候我眼睛都还没睁开呢，就已经会凭着本能去找妈妈的奶喝了——吃货属性从小拉满！
+    </li>
+    <li>
+      <span class="year">2022 年 · 夏天</span><br>
+      两个月大的时候，我遇到了现在的爸爸妈妈。他们一看到我就走不动路了，爸爸把我捧起来的时候手都在抖（后来他说是太激动了）。从那天起，我有了名字——<strong>骑士</strong>。
+    </li>
+    <li>
+      <span class="year">2023 年</span><br>
+      一岁生日那天，妈妈给我买了一个超大的猫爬架。我开心得上蹿下跳，结果一脚踩空从第三层滚到了地上……为了挽回面子，我马上站起来舔了舔爪子，假装什么都没发生。
+    </li>
+    <li>
+      <span class="year">2024 年</span><br>
+      两岁那年第一次坐车出远门！一开始我还紧张地喵喵叫，后来发现车窗外的风景太有意思了——小鸟、大树、呼呼的风，从此我成了兜风狂魔，一看到猫包就自己钻进去。
+    </li>
+    <li>
+      <span class="year">2026 年 · 现在</span><br>
+      四岁了，我依然每天睡得昏天黑地，吃得心满意足，偶尔被激光笔耍得团团转。爸爸说我胖了，但我选择性地屏蔽了这句话。总之——喵生圆满，继续幸福！
+    </li>
+  </ul>
+</section>
+
+<footer>
+  <p>🐾 骑士的小窝 · 由爸爸妈妈倾情打造</p>
+  <p>如有小鱼干赞助需求，请随时投喂 <span class="fish">🐟</span></p>
+</footer>
+
 </body>
 </html>
